@@ -6,7 +6,7 @@ pipeline{
     stages{
         stage('Git Checkout'){
             steps{
-                git credentialsId: '1', url: 'https://github.com/javahometech/iac-demo'
+                git credentialsId: '1', url: 'https://github.com/keerthy-sith/Terraform-Jenkins-Integration-two-branches.git'
             }
         }
         stage('Terraform init'){

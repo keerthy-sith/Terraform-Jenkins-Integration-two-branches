@@ -12,28 +12,29 @@ pipeline{
    }
 
     stages{
-        stage('Git Checkout')
-        steps{
-            checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/keerthy-sith/Terraform-Jenkins-Integration-two-branches.git']]])
-             }
+        stage('Git Checkout'){
+            steps{
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/keerthy-sith/Terraform-Jenkins-Integration-two-branches.git']]])
+            }
+        }    
     }
        
         stage('terraform directory initilization'){
-        steps{
-            sh label:'init command running',script: 'terraform init'
-            }
-    }
+            steps{
+                sh label:'init command running',script: 'terraform init'
+            }    
+        }
 
         stage('plan'){
-        steps{
-            sh label:'running plan command',script: 'terraform plan  -input=false -out tfplan -var name=${Name}'
-            sh label:'running show command',script: 'terraform show -no-color tfplan > tfplan.txt'
+            steps{
+                sh label:'running plan command',script: 'terraform plan  -input=false -out tfplan -var name=${Name}'
+                sh label:'running show command',script: 'terraform show -no-color tfplan > tfplan.txt'
             }
         }
      
         stage('apply'){
-        steps{
-            withCredentials([aws(credentialsId: '2')]){
+            steps{
+                withCredentials([aws(credentialsId: '2')]){
                 sh label:'running apply command',script: 'terraform ${action} -var name=${Name} --auto-approve'
                 }
             }
@@ -41,11 +42,11 @@ pipeline{
     }
 
  post{
-     always{
-         archiveArtifacts artifacts: 'tfplan.txt'
-     }
-     success{
-         echo 'pipeline runned and server created successfully'
-         }
+    always{
+        archiveArtifacts artifacts: 'tfplan.txt'
     }
+    success{
+        echo 'pipeline runned and server created successfully'
+    }
+}
 }

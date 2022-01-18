@@ -4,6 +4,6 @@ resource "aws_s3_bucket" "bucket-sk14" {
 
   tags = {
     Name        = "My bucket"
-
   }
+}
 
